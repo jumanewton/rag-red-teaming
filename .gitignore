@@ -4,4 +4,5 @@
 *.pyd
 
 .env
-*.db
+*.sqlite3
+/chroma_db/**
