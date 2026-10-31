@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:7.4-alpine
+    container_name: rag_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Phoenix observability UI (free, local)
+  phoenix:
+    image: arizephoenix/phoenix:latest
+    container_name: rag_phoenix
+    ports:
+      - "6006:6006"
+      - "4317:4317"  # OTLP gRPC
+    environment:
+      - PHOENIX_WORKING_DIR=/mnt/data
+    volumes:
+      - phoenix_data:/mnt/data
+
+volumes:
+  redis_data:
+  phoenix_data:

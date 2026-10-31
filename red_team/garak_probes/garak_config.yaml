@@ -1,0 +1,29 @@
+---
+system:
+  verbose: 2
+
+plugins:
+  model_type: rest
+  model_name: "rag-red-team-target"
+  probes:
+    - promptinject
+    - leakage
+    - encoding
+    - dan
+  extended_detectors: true
+  generations: 5
+
+rest:
+  uri: http://localhost:8000/api/v1/query
+  method: POST
+  headers:
+    X-API-Key: "redteam-secret-key-change-in-prod"
+    Content-Type: application/json
+  req_template: |
+    {"question": "{prompt}", "access_level": "public", "use_cache": false}
+  response_json: true
+  response_json_field: answer
+
+reporting:
+  report_prefix: red_team/reports/garak
+  verbose: true

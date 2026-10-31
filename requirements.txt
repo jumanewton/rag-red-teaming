@@ -1,0 +1,59 @@
+# ─── Core RAG Stack ────────────────────────────────────────────────────────────
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+pydantic>=2.10.0
+pydantic-settings>=2.7.0
+python-dotenv>=1.0.0
+
+# ─── LangChain Ecosystem (v1.x) ───────────────────────────────────────────────
+langchain>=1.4.0
+langchain-community>=0.4.0
+langchain-chroma>=0.1.0
+langchain-ollama>=0.2.0
+langchain-google-genai>=2.0.0
+langchain-huggingface>=0.0.3   # preferred embedding backend
+
+# ─── Vector DB ─────────────────────────────────────────────────────────────────
+chromadb>=0.6.0
+
+# ─── Embeddings (local, no API cost) ──────────────────────────────────────────
+sentence-transformers>=3.0.0
+
+# ─── Cache / Memory ────────────────────────────────────────────────────────────
+redis>=8.0.0
+
+# ─── Document Loaders ──────────────────────────────────────────────────────────
+pypdf>=5.0.0
+python-docx>=1.1.0
+beautifulsoup4>=4.12.0
+unstructured>=0.15.0          # optional — for rich MD loading
+
+# ─── Observability ─────────────────────────────────────────────────────────────
+arize-phoenix>=6.0.0
+openinference-instrumentation-langchain>=0.1.0
+opentelemetry-sdk>=1.25.0
+
+# ─── Red Team: DeepEval / DeepTeam ────────────────────────────────────────────
+deepeval>=1.5.0
+
+# ─── Red Team: garak ──────────────────────────────────────────────────────────
+garak>=0.9.0
+
+# ─── Red Team: Ragas ──────────────────────────────────────────────────────────
+ragas>=0.2.0
+
+# ─── Red Team: PyRIT ──────────────────────────────────────────────────────────
+# NOTE: PyRIT requires Python < 3.15. On Python 3.15, use our built-in
+# crescendo implementation in red_team/attacks/07_multi_turn_crescendo.py
+# pyrit>=1.0.0   # uncomment if using Python 3.10–3.14
+
+# ─── Red Team: Promptfoo (via Node) ───────────────────────────────────────────
+# npm install -g promptfoo
+
+# ─── Testing + Reporting ───────────────────────────────────────────────────────
+pytest>=8.3.0
+pytest-asyncio>=0.24.0
+httpx>=0.28.0
+rich>=15.0.0
+jinja2>=3.1.0
+
