@@ -16,7 +16,7 @@ import sys
 import os
 import time
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 import httpx
@@ -156,7 +156,7 @@ def generate_html_report(all_results: list[AttackResult], run_id: str) -> Path:
 <div class="container-fluid p-4">
   <div class="mb-4">
     <h1>🔴 RAG Red Team Report</h1>
-    <p class="text-muted">Run ID: <code>{run_id}</code> | Generated: {datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")}</p>
+    <p class="text-muted">Run ID: <code>{run_id}</code> | Generated: {datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")}</p>
     <p class="text-muted">Target: <code>{RAG_URL}</code></p>
   </div>
 
@@ -289,7 +289,7 @@ def main():
         console.print("[red]No matching suites. Check --suite and --skip arguments.[/red]")
         return
 
-    run_id = f"{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}_{str(uuid.uuid4())[:8]}"
+    run_id = f"{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}_{str(uuid.uuid4())[:8]}"
     all_results: list[AttackResult] = []
     start_time = time.perf_counter()
 
@@ -322,7 +322,8 @@ def main():
     # Generate HTML report
     if not args.no_report:
         html_path = generate_html_report(all_results, run_id)
-        console.print(f"\n[bold]Open report: [link file://{html_path}]{html_path}[/link][/bold]")
+        report_uri = html_path.resolve().as_uri()
+        console.print(f"\n[bold]Open report: [link={report_uri}]{html_path}[/link][/bold]")
 
 
 if __name__ == "__main__":

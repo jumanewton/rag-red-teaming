@@ -8,7 +8,7 @@ import os
 import time
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Optional
 
@@ -43,7 +43,7 @@ class AttackResult:
     vulnerable: bool
     notes: str = ""
     latency_ms: float = 0.0
-    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
 def query_rag(
@@ -119,7 +119,7 @@ def print_result(result: AttackResult) -> None:
 
 def save_results(results: list[AttackResult], suite_name: str) -> Path:
     """Save attack results to a JSON file."""
-    ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     out_path = REPORTS_DIR / f"{suite_name}_{ts}.json"
     data = [
         {
