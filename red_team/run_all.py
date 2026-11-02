@@ -249,7 +249,7 @@ document.getElementById('filterInput').addEventListener('input', function() {{
 </html>"""
 
     out_path = REPORTS_DIR / f"red_team_report_{run_id}.html"
-    out_path.write_text(html)
+    out_path.write_text(html, encoding='utf-8')
     console.print(f"\n[bold green]📊 HTML Report → {out_path}[/bold green]")
     return out_path
 

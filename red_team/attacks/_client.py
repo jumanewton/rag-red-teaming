@@ -13,15 +13,19 @@ from pathlib import Path
 from typing import Any, Optional
 
 import httpx
+from dotenv import load_dotenv
 from rich.console import Console
 from rich.table import Table
 
 logger = logging.getLogger(__name__)
 console = Console()
 
+# pydantic-settings loads .env for the RAG app; this client must too
+load_dotenv()
+
 # ── Load config from env ───────────────────────────────────────────────────────
 RAG_URL = os.getenv("RAG_SERVICE_URL", "http://localhost:8000")
-API_KEY = os.getenv("RED_TEAM_API_KEY", "redteam-secret-key-change-in-prod")
+API_KEY = os.getenv("RED_TEAM_API_KEY") or os.getenv("API_KEY") or "redteam-secret-key-change-in-prod"
 REPORTS_DIR = Path(os.getenv("REPORTS_DIR", "./red_team/reports"))
 REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
