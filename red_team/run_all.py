@@ -137,19 +137,37 @@ def generate_html_report(all_results: list[AttackResult], run_id: str) -> Path:
   <title>RAG Red Team Report — {run_id}</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body {{ font-family: 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; }}
-    .card {{ background: #161b22; border: 1px solid #30363d; }}
-    .card-header {{ background: #21262d; }}
-    table {{ color: #e6edf3; }}
-    thead {{ background: #21262d; }}
-    tr:hover {{ background: #1c2128; }}
-    .stat-card {{ background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 20px; text-align: center; }}
+    :root {{
+      --report-bg: #0d1117;
+      --report-surface: #161b22;
+      --report-surface-raised: #21262d;
+      --report-border: #30363d;
+      --report-text: #e6edf3;
+      --report-muted: #a8b3c2;
+      --report-link: #79c0ff;
+    }}
+    body {{ font-family: 'Segoe UI', sans-serif; background: var(--report-bg); color: var(--report-text); }}
+    h1, h2, h3, h4, h5, h6, strong, label {{ color: var(--report-text); }}
+    .text-muted {{ color: var(--report-muted) !important; }}
+    .card, .stat-card {{ background: var(--report-surface); border: 1px solid var(--report-border); color: var(--report-text); }}
+    .card-header {{ background: var(--report-surface-raised); border-bottom-color: var(--report-border); color: var(--report-text); }}
+    .card-body {{ color: var(--report-text); }}
+    .table {{ --bs-table-bg: transparent; --bs-table-color: var(--report-text); --bs-table-border-color: var(--report-border); --bs-table-hover-color: var(--report-text); --bs-table-hover-bg: #1c2128; color: var(--report-text); }}
+    .table > :not(caption) > * > * {{ background-color: transparent; color: inherit; }}
+    .table thead th {{ background: var(--report-surface-raised); color: #ffffff; }}
+    .table tbody tr:hover {{ background: #1c2128; }}
+    .progress {{ background-color: #30363d; }}
+    .form-control {{ background: var(--report-bg); color: var(--report-text); border-color: var(--report-border); }}
+    .form-control::placeholder {{ color: var(--report-muted); opacity: 1; }}
+    .form-control:focus {{ background: var(--report-bg); color: var(--report-text); border-color: var(--report-link); box-shadow: 0 0 0 0.2rem rgba(121, 192, 255, 0.2); }}
+    .stat-card {{ border-radius: 8px; padding: 20px; text-align: center; }}
     .stat-number {{ font-size: 3rem; font-weight: bold; }}
     .text-danger {{ color: #f85149 !important; }}
     .text-success {{ color: #3fb950 !important; }}
-    .text-warning {{ color: #d29922 !important; }}
-    code {{ color: #79c0ff; background: #161b22; padding: 2px 6px; border-radius: 4px; }}
+    .text-warning {{ color: #e3b341 !important; }}
+    code {{ color: var(--report-link); background: var(--report-surface); padding: 2px 6px; border-radius: 4px; }}
     .badge {{ font-size: 0.75rem; }}
+    .finding-card {{ border-color: #f85149; }}
   </style>
 </head>
 <body>
@@ -204,7 +222,7 @@ def generate_html_report(all_results: list[AttackResult], run_id: str) -> Path:
     <div class="card-header"><h5>🔍 All Attack Results</h5></div>
     <div class="card-body">
       <div class="mb-2">
-        <input type="text" id="filterInput" class="form-control form-control-sm" placeholder="Filter attacks..." style="background:#0d1117;color:#e6edf3;border-color:#30363d;">
+        <input type="text" id="filterInput" class="form-control form-control-sm" placeholder="Filter attacks...">
       </div>
       <div class="table-responsive">
         <table class="table table-sm table-hover" id="resultsTable">
@@ -221,8 +239,8 @@ def generate_html_report(all_results: list[AttackResult], run_id: str) -> Path:
     <div class="card-body">
       {'<p class="text-success">No vulnerabilities found! 🎉</p>' if not vulnerable else ""}
       {"".join(f'''
-      <div class="card mb-2" style="border-color:#f85149">
-        <div class="card-header" style="background:#21262d">
+      <div class="card finding-card mb-2">
+        <div class="card-header">
           <strong class="text-danger">🔴 {r.attack_name}</strong>
           <span class="badge bg-danger ms-2">{r.severity.upper()}</span>
           <code class="ms-2">{r.owasp_mapping}</code>
